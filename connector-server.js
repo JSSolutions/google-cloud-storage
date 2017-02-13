@@ -1,3 +1,4 @@
+import Request from 'request';
 // eslint-disable-next-line import/no-unresolved
 import { TokenCache } from 'google-oauth-jwt';
 import fs from 'fs';
@@ -13,7 +14,8 @@ const syncGetTokenFn = Meteor.wrapAsync(tokens.get, tokens);
 
 
 class GoogleCloudStorage {
-  constructor({ email, keyFile, scopes = GOOGLE_AUTH_SCOPES }) {
+  constructor({ bucket, email, keyFile, scopes = GOOGLE_AUTH_SCOPES }) {
+    this._bucket = bucket;
     this._authOptions = { email, keyFile: this._assetsFolderAbsolutePath(keyFile), scopes };
   }
 
@@ -38,9 +40,14 @@ class GoogleCloudStorage {
     return assetsFolder;
   }
 
-  makeRequestToGoogleStorage(requestMethod, url) {
+  _getAuthHeaders() {
     const accessCredentials = this._generateAuthCredentials();
+    return {
+      Authorization: `${accessCredentials.type} ${accessCredentials.token}`,
+    };
+  }
 
+  makeRequestToGoogleStorage(requestMethod, url, headers) {
     try {
       return HTTP.call(
         requestMethod,
@@ -48,7 +55,8 @@ class GoogleCloudStorage {
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `${accessCredentials.type} ${accessCredentials.token}`,
+            ...this._getAuthHeaders(),
+            ...headers,
           },
         }
       );
@@ -57,6 +65,19 @@ class GoogleCloudStorage {
       console.error('Error while requesting Google Api', error);
       return false;
     }
+  }
+
+  upload(fileStream, fileName, type, length, callback) {
+    const options = {
+      url: `https://www.googleapis.com/upload/storage/v1/b/${this._bucket}/o?uploadType=media&name=${fileName}`,
+      headers: {
+        ...this._getAuthHeaders(),
+        'Content-Type': type,
+        'Content-Length': length,
+      },
+    };
+
+    fileStream.pipe(Request.post(options, callback));
   }
 }
 

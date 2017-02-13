@@ -9,9 +9,13 @@ Package.describe({
 // eslint-disable-next-line prefer-arrow-callback
 Package.onUse(function onUse(api) {
   api.versionsFrom('1.4');
-  api.mainModule('connector-server.js', 'client');
+  api.use([
+    'ecmascript',
+  ]);
+  api.mainModule('connector-server.js', 'server');
 });
 
 Npm.depends({
   'google-oauth-jwt': '0.2.0',
+  request: '2.79.0',
 });
