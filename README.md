@@ -7,9 +7,8 @@ Google Cloud Storage API Client for Meteor.
 ```js
 //initialize client
 var authOptions = {
-  serviceEmail: CloudSettings.SERVICE_EMAIL,
-  pemFile: CloudSettings.PEM_FILE, //PEM file name located in `/private` directory
-  projectName: 'MyProjectName' //name of your project in google developer console
+  email: CloudSettings.SERVICE_EMAIL,
+  keyFile: CloudSettings.PEM_FILE, //PEM file name located in `/private` directory
 };
 
 var cloudStorageClient = new GoogleCloudStorage(authOptions); //create new client instance
