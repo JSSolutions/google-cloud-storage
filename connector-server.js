@@ -7,6 +7,7 @@ import { HTTP } from 'meteor/http';
 
 
 const GOOGLE_AUTH_SCOPES = ['https://www.googleapis.com/auth/devstorage.read_write'];
+const GOOGLE_STORAGE_API_BASE_URL = 'https://www.googleapis.com/storage/v1';
 
 const tokens = new TokenCache();
 const syncGetTokenFn = Meteor.wrapAsync(tokens.get, tokens);
@@ -47,10 +48,11 @@ class GoogleCloudStorage {
   }
 
   makeRequestToGoogleStorage(requestMethod, url, headers = {}) {
+    const wholeUrl = `${GOOGLE_STORAGE_API_BASE_URL}/${url}`;
     try {
       return HTTP.call(
         requestMethod,
-        url,
+        wholeUrl,
         {
           headers: {
             'Content-Type': 'application/json',
