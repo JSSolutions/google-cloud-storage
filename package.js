@@ -17,5 +17,4 @@ Package.onUse(function onUse(api) {
 
 Npm.depends({
   'google-oauth-jwt': '0.2.0',
-  request: '2.79.0',
 });

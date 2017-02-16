@@ -1,4 +1,3 @@
-import Request from 'request';
 // eslint-disable-next-line import/no-unresolved
 import { TokenCache } from 'google-oauth-jwt';
 import fs from 'fs';
@@ -47,7 +46,7 @@ class GoogleCloudStorage {
     };
   }
 
-  makeRequestToGoogleStorage(requestMethod, url, headers) {
+  makeRequestToGoogleStorage(requestMethod, url, headers = {}) {
     try {
       return HTTP.call(
         requestMethod,
@@ -67,17 +66,8 @@ class GoogleCloudStorage {
     }
   }
 
-  upload(fileStream, fileName, type, length, callback) {
-    const options = {
-      url: `https://www.googleapis.com/upload/storage/v1/b/${this._bucket}/o?uploadType=media&name=${fileName}`,
-      headers: {
-        ...this._getAuthHeaders(),
-        'Content-Type': type,
-        'Content-Length': length,
-      },
-    };
-
-    fileStream.pipe(Request.post(options, callback));
+  removeFile(object) {
+    return this.makeRequestToGoogleStorage('DELETE', `/b/${this._bucket}/o/${object}`);
   }
 }
 

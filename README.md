@@ -2,6 +2,8 @@
 
 Google Cloud Storage API Client for Meteor.
 
+__Right now only remove file method is implemented__
+
 ## Quick example
 
 ```js
