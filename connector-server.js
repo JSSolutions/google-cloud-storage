@@ -47,12 +47,11 @@ class GoogleCloudStorage {
     };
   }
 
-  makeRequestToGoogleStorage(requestMethod, url, headers = {}) {
-    const wholeUrl = `${GOOGLE_STORAGE_API_BASE_URL}/${url}`;
+  makeRequestToGoogleStorage(requestMethod, urlPath, headers = {}) {
     try {
       return HTTP.call(
         requestMethod,
-        wholeUrl,
+        `${GOOGLE_STORAGE_API_BASE_URL}/${urlPath}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -69,7 +68,7 @@ class GoogleCloudStorage {
   }
 
   removeFile(object) {
-    return this.makeRequestToGoogleStorage('DELETE', `/b/${this._bucket}/o/${object}`);
+    return this.makeRequestToGoogleStorage('DELETE', `b/${this._bucket}/o/${object}`);
   }
 }
 
