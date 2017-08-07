@@ -14,6 +14,9 @@ var authOptions = {
 };
 
 var cloudStorageClient = new GoogleCloudStorage(authOptions); //create new client instance
+
+// remove file
+cloudStorageClient.removeFile('test_file_to_remove.txt');
 ```
 
 
