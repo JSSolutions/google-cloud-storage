@@ -7,6 +7,8 @@ __Right now only remove file method is implemented__
 ## Quick example
 
 ```js
+import { GoogleCloudStorage } from 'meteor/jss:google-cloud-storage';
+
 //initialize client
 var authOptions = {
   email: CloudSettings.SERVICE_EMAIL,
